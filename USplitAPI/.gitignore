@@ -1,0 +1,65 @@
+# Build results
+bin/
+obj/
+
+# Rider project files
+.idea/
+*.sln.iml
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# ASP.NET Core Secrets
+**/appsettings.Development.json
+**/appsettings.Local.json
+secrets.json
+
+# dotnet watch logs
+**/Properties/launchSettings.json
+
+# Publish output
+publish/
+
+# Rider-specific workspace cache
+.idea/
+.idea/**
+
+# Auto-generated files
+*.dbmdl
+
+# VSCode if used
+.vscode/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
+
+# Logs
+*.log
+
+# Test Results
+TestResults/
+
+# JetBrains Rider caches
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# Coverage reports
+coverage/
+*.coverage
+*.coveragexml
+
+# Crash dumps
+*.dmp
