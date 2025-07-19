@@ -38,5 +38,15 @@ public class USplitDBContext : DbContext
             .HasOne(t => t.Family)
             .WithMany(f => f.TransactionList)
             .HasForeignKey(t => t.FamilyId);
+
+        modelBuilder.Entity<CurrentBalanceEntity>()
+            .HasOne(cb => cb.Family)
+            .WithMany(f => f.CurrentBalanceList)
+            .HasForeignKey(cb => cb.FamilyId);
+        
+        modelBuilder.Entity<CurrentBalanceEntity>()
+            .HasOne(cb => cb.User)
+            .WithMany(u => u.CurrentBalanceList)
+            .HasForeignKey(cb => cb.UserId);
     }
 }

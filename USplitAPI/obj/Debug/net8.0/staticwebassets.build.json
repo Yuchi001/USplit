@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "qdPMKwqN8L8Vr3lAJlGGFdUKetLOhqiFpLHibnD2yqs=",
+  "Hash": "IqorhRC4xzmgqPZZc5lB4RCJCpfbDxMjd+PnP9QN50A=",
   "Source": "USplitAPI",
   "BasePath": "_content/USplitAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }
