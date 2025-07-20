@@ -7,14 +7,20 @@ namespace USplitAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController(IUserService service) : ControllerBase
+public class UserController : ControllerBase
 {
-    [Authorize]
+    private readonly IUserService _service;
+
+    public UserController(IUserService service)
+    {
+        _service = service;
+    }
+    
     [HttpPost]
     public async Task<IActionResult> RegisterUserAsync(UserDto userDto) =>
-        this.ControllerResponse(await service.RegisterUserAsync(userDto));
+        this.ControllerResponse(await _service.RegisterUserAsync(userDto));
 
     [HttpGet("check-email")]
     public async Task<IActionResult> IsEmailTaken(string email) =>
-        this.ControllerResponse(await service.IsEmailTaken(email));
+        this.ControllerResponse(await _service.IsEmailTakenAsync(email));
 }

@@ -2,8 +2,8 @@
 
 public class CurrentBalanceDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public int Balance { get; set; }
-    public Guid UserId { get; set; }
-    public Guid FamilyId { get; set; }
+    public int UserId { get; set; }
+    public int FamilyId { get; set; }
 }

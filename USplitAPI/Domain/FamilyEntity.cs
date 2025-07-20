@@ -4,7 +4,7 @@ namespace USplitAPI.Domain;
 
 public class FamilyEntity
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; } = "";
     
     public List<UserFamilyJoinedEntity> UserFamilyList { get; set; } = new();

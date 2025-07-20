@@ -24,18 +24,20 @@ namespace USplitAPI.Migrations
 
             modelBuilder.Entity("USplitAPI.Domain.CurrentBalanceEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Balance")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("FamilyId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("FamilyId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -43,14 +45,16 @@ namespace USplitAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CurrentBalanceEntity");
+                    b.ToTable("BalanceList");
                 });
 
             modelBuilder.Entity("USplitAPI.Domain.FamilyEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -61,20 +65,48 @@ namespace USplitAPI.Migrations
                     b.ToTable("Families");
                 });
 
+            modelBuilder.Entity("USplitAPI.Domain.RefreshTokenEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("USplitAPI.Domain.TransactionEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Amount")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("FamilyId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("FamilyId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -87,19 +119,24 @@ namespace USplitAPI.Migrations
 
             modelBuilder.Entity("USplitAPI.Domain.UserEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
-                    b.Property<string>("AuthId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateJoined")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -110,11 +147,11 @@ namespace USplitAPI.Migrations
 
             modelBuilder.Entity("USplitAPI.Domain.UserFamilyJoinedEntity", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("FamilyId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("FamilyId")
+                        .HasColumnType("integer");
 
                     b.HasKey("UserId", "FamilyId");
 
@@ -138,6 +175,17 @@ namespace USplitAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Family");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("USplitAPI.Domain.RefreshTokenEntity", b =>
+                {
+                    b.HasOne("USplitAPI.Domain.UserEntity", "User")
+                        .WithOne()
+                        .HasForeignKey("USplitAPI.Domain.RefreshTokenEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

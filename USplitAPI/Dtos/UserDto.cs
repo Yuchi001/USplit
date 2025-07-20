@@ -2,8 +2,9 @@
 
 public class UserDto
 {
-    public Guid Id { get; set; }
-    public string AuthId { get; set; } = "";
+    public int Id { get; set; }
     public string Email { get; set; } = "";
     public string DisplayName { get; set; } = "";
+    public string Password { get; set; } = "";
+    public DateTime DateJoined { get; set; }
 }
