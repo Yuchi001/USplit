@@ -12,8 +12,8 @@ using USplitAPI.Data;
 namespace USplitAPI.Migrations
 {
     [DbContext(typeof(USplitDBContext))]
-    [Migration("20250719165023_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250720111557_CreatedAuthID")]
+    partial class CreatedAuthID
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,30 @@ namespace USplitAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("USplitAPI.Domain.CurrentBalanceEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Balance")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("FamilyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FamilyId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CurrentBalanceEntity");
+                });
 
             modelBuilder.Entity("USplitAPI.Domain.FamilyEntity", b =>
                 {
@@ -70,6 +94,10 @@ namespace USplitAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AuthId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -96,6 +124,25 @@ namespace USplitAPI.Migrations
                     b.HasIndex("FamilyId");
 
                     b.ToTable("UserFamilyJoinedEntity");
+                });
+
+            modelBuilder.Entity("USplitAPI.Domain.CurrentBalanceEntity", b =>
+                {
+                    b.HasOne("USplitAPI.Domain.FamilyEntity", "Family")
+                        .WithMany("CurrentBalanceList")
+                        .HasForeignKey("FamilyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("USplitAPI.Domain.UserEntity", "User")
+                        .WithMany("CurrentBalanceList")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Family");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("USplitAPI.Domain.TransactionEntity", b =>
@@ -138,6 +185,8 @@ namespace USplitAPI.Migrations
 
             modelBuilder.Entity("USplitAPI.Domain.FamilyEntity", b =>
                 {
+                    b.Navigation("CurrentBalanceList");
+
                     b.Navigation("TransactionList");
 
                     b.Navigation("UserFamilyList");
@@ -145,6 +194,8 @@ namespace USplitAPI.Migrations
 
             modelBuilder.Entity("USplitAPI.Domain.UserEntity", b =>
                 {
+                    b.Navigation("CurrentBalanceList");
+
                     b.Navigation("TransactionList");
 
                     b.Navigation("UserFamilyList");

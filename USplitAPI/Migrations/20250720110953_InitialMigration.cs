@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace USplitAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,6 +34,32 @@ namespace USplitAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CurrentBalanceEntity",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Balance = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FamilyId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CurrentBalanceEntity", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CurrentBalanceEntity_Families_FamilyId",
+                        column: x => x.FamilyId,
+                        principalTable: "Families",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CurrentBalanceEntity_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -87,6 +113,16 @@ namespace USplitAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CurrentBalanceEntity_FamilyId",
+                table: "CurrentBalanceEntity",
+                column: "FamilyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CurrentBalanceEntity_UserId",
+                table: "CurrentBalanceEntity",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_FamilyId",
                 table: "Transactions",
                 column: "FamilyId");
@@ -105,6 +141,9 @@ namespace USplitAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CurrentBalanceEntity");
+
             migrationBuilder.DropTable(
                 name: "Transactions");
 

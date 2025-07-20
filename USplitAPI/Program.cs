@@ -3,12 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using USplitAPI.Data;
 using USplitAPI.Mappings;
+using USplitAPI.Services.Implementations;
+using USplitAPI.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(FamilyProfile).Assembly);
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 builder.Services.AddAuthentication(options =>
     {

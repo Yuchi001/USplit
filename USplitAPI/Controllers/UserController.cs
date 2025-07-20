@@ -14,7 +14,7 @@ public class UserController(IUserService service) : ControllerBase
     public async Task<IActionResult> RegisterUserAsync(UserDto userDto) =>
         this.ControllerResponse(await service.RegisterUserAsync(userDto));
 
-    [HttpGet]
+    [HttpGet("check-email")]
     public async Task<IActionResult> IsEmailTaken(string email) =>
         this.ControllerResponse(await service.IsEmailTaken(email));
 }
