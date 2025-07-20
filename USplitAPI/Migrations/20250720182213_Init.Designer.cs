@@ -12,8 +12,8 @@ using USplitAPI.Data;
 namespace USplitAPI.Migrations
 {
     [DbContext(typeof(USplitDBContext))]
-    [Migration("20250720171349_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250720182213_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

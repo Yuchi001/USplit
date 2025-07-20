@@ -17,6 +17,8 @@ public record ResultTuple
         this.statusCode = statusCode;
     }
 
+    public T Result<T>() => (T)result!;
+
     public static ResultTuple Success(object res)
     {
         return new ResultTuple(res);
