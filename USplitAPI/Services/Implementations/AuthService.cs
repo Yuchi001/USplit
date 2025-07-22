@@ -56,19 +56,7 @@ public class AuthService : IAuthService
         
         return ResultTuple.Success(new { token = tokenJWT, refresh_token = refreshToken.Result<RefreshTokenDto>().Token });
     }
-
-    public async Task<ResultTuple> LogoutUserAsync(int userId)
-    {
-        var refreshToken = await _context.RefreshTokens.SingleOrDefaultAsync(e => e.UserId == userId);
-        if (refreshToken == null) return ResultTuple.Success(true);
-
-        _context.RefreshTokens.Remove(refreshToken);
-
-        await _context.SaveChangesAsync();
-        
-        return ResultTuple.Success(true);
-    }
-
+    
     public async Task<ResultTuple> IsEmailTakenAsync(string email)
     {
         var taken = await _context.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower());

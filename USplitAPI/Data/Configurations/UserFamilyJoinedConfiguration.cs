@@ -13,16 +13,19 @@ public class UserFamilyJoinedConfiguration : IEntityTypeConfiguration<UserFamily
         builder
             .HasOne(uf => uf.User)
             .WithMany(u => u.UserFamilyList)
-            .HasForeignKey(uf => uf.UserId);
+            .HasForeignKey(uf => uf.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(uf => uf.Family)
             .WithMany(f => f.UserFamilyList)
-            .HasForeignKey(uf => uf.FamilyId);
+            .HasForeignKey(uf => uf.FamilyId)
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder
             .HasMany(uf => uf.Debts)
             .WithOne(d => d.UserFamily)
-            .HasForeignKey(d => new { UserId = d.OwnerUserId, FamilyId = d.OwnerFamilyId });
+            .HasForeignKey(d => new { UserId = d.OwnerUserId, FamilyId = d.OwnerFamilyId })
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -10,5 +10,10 @@ public class FamilyConfiguration : IEntityTypeConfiguration<FamilyEntity>
     {
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+        builder
+            .HasOne<UserEntity>(e => e.User)
+            .WithMany()
+            .HasForeignKey(e => e.OwnerUserId);
     }
 }

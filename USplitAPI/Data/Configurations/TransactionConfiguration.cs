@@ -11,12 +11,14 @@ public class TransactionConfiguration : IEntityTypeConfiguration<TransactionEnti
         builder
             .HasOne(t => t.User)
             .WithMany(u => u.TransactionList)
-            .HasForeignKey(t => t.UserId);
+            .HasForeignKey(t => t.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(t => t.Family)
             .WithMany(f => f.TransactionList)
-            .HasForeignKey(t => t.FamilyId);
+            .HasForeignKey(t => t.FamilyId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).UseIdentityAlwaysColumn();

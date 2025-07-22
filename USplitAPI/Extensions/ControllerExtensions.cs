@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using USplitAPI.Services.Interfaces;
 
-namespace USplitAPI.Controllers;
+namespace USplitAPI.Extensions;
 
 public static class ControllerExtensions
 {

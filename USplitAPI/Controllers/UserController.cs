@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using USplitAPI.Dtos;
+using USplitAPI.Extensions;
 using USplitAPI.Services.Interfaces;
 
 namespace USplitAPI.Controllers;
