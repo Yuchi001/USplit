@@ -17,24 +17,9 @@ public class UserController : ControllerBase
     }
     
     [HttpPost]
-    [Route("register")]
-    public async Task<IActionResult> RegisterUserAsync(UserDto userDto) =>
-        this.ControllerResponse(await _service.RegisterUserAsync(userDto));
-    
-    [HttpPost]
-    [Route("login")]
-    public async Task<IActionResult> LoginUserAsync(string email, string password, bool rememberMe) =>
-        this.ControllerResponse(await _service.LoginUserAsync(email, password, rememberMe));
-    
-    [HttpDelete]
-    [Route("logout")]
-    public async Task<IActionResult> LogoutUserAsync(int userId) =>
-        this.ControllerResponse(await _service.LogoutUserAsync(userId));
-
-    [HttpGet]
-    [Route("check-email")]
-    public async Task<IActionResult> IsEmailTaken(string email) =>
-        this.ControllerResponse(await _service.IsEmailTakenAsync(email));
+    [Route("add")]
+    public async Task<IActionResult> AddUserAsync(UserDto userDto) =>
+        this.ControllerResponse(await _service.AddUserAsync(userDto));
     
     [HttpDelete]
     [Route("remove")]

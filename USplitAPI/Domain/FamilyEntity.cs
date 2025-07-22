@@ -9,5 +9,4 @@ public class FamilyEntity
     
     public List<UserFamilyJoinedEntity> UserFamilyList { get; set; } = new();
     public List<TransactionEntity> TransactionList { get; set; } = new();
-    public List<CurrentBalanceEntity> CurrentBalanceList { get; set; } = new();
 }

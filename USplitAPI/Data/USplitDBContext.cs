@@ -8,8 +8,8 @@ public class USplitDBContext : DbContext
     public DbSet<TransactionEntity> Transactions { get; set; }
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<FamilyEntity> Families { get; set; }
-    public DbSet<CurrentBalanceEntity> BalanceList { get; set; }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
+    public DbSet<DebtEntity> Debts { get; set; }
 
     public USplitDBContext(DbContextOptions<USplitDBContext> options) 
         : base(options) { }

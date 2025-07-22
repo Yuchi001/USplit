@@ -5199,24 +5199,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Yuhi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC\\USplit\\USplitAPI\\USplitAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Yuhi\\USplit\\USplitAPI\\USplitAPI.csproj",
       "projectName": "USplitAPI",
-      "projectPath": "C:\\Users\\PC\\USplit\\USplitAPI\\USplitAPI.csproj",
-      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PC\\USplit\\USplitAPI\\obj\\",
+      "projectPath": "C:\\Users\\Yuhi\\USplit\\USplitAPI\\USplitAPI.csproj",
+      "packagesPath": "C:\\Users\\Yuhi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Yuhi\\USplit\\USplitAPI\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Yuhi\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5224,7 +5219,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -5243,7 +5237,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -5299,6 +5293,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.18, 8.0.18]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[8.0.18, 8.0.18]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.18, 8.0.18]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[8.0.18, 8.0.18]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -5307,7 +5319,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
@@ -5316,7 +5328,7 @@
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Wersja USplitAPI jest zależna od Microsoft.Extensions.Configuration.Json (>= 8.0.204), ale nie znaleziono Microsoft.Extensions.Configuration.Json 8.0.204. Zamiast tego rozwiązano Microsoft.Extensions.Configuration.Json 9.0.0.",
+      "message": "USplitAPI depends on Microsoft.Extensions.Configuration.Json (>= 8.0.204) but Microsoft.Extensions.Configuration.Json 8.0.204 was not found. Microsoft.Extensions.Configuration.Json 9.0.0 was resolved instead.",
       "libraryId": "Microsoft.Extensions.Configuration.Json",
       "targetGraphs": [
         "net8.0"

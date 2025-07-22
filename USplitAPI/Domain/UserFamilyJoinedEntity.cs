@@ -7,4 +7,6 @@ public class UserFamilyJoinedEntity
 
     public int FamilyId { get; set; }
     public FamilyEntity Family { get; set; }
+    
+    public List<DebtEntity> Debts { get; set; }
 }

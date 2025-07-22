@@ -19,5 +19,10 @@ public class UserFamilyJoinedConfiguration : IEntityTypeConfiguration<UserFamily
             .HasOne(uf => uf.Family)
             .WithMany(f => f.UserFamilyList)
             .HasForeignKey(uf => uf.FamilyId);
+        
+        builder
+            .HasMany(uf => uf.Debts)
+            .WithOne(d => d.UserFamily)
+            .HasForeignKey(d => new { UserId = d.OwnerUserId, FamilyId = d.OwnerFamilyId });
     }
 }

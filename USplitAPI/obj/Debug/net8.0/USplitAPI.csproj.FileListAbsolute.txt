@@ -129,7 +129,6 @@ C:\Users\Yuhi\USplit\USplitAPI\obj\Debug\net8.0\USplitAPI.pdb
 C:\Users\Yuhi\USplit\USplitAPI\obj\Debug\net8.0\USplitAPI.genruntimeconfig.cache
 C:\Users\Yuhi\USplit\USplitAPI\obj\Debug\net8.0\ref\USplitAPI.dll
 C:\Users\Yuhi\USplit\USplitAPI\bin\Debug\net8.0\AutoMapper.dll
-C:\Users\Yuhi\USplit\USplitAPI\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\Yuhi\USplit\USplitAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Yuhi\USplit\USplitAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
 C:\Users\Yuhi\USplit\USplitAPI\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll

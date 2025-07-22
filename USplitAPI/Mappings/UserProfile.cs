@@ -9,6 +9,7 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<UserEntity, UserDto>();
+        CreateMap<UserEntity, DebtDto.UserShortDto>();
         CreateMap<UserDto, UserEntity>();
     }
 }
