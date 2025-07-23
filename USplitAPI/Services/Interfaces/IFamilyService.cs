@@ -1,8 +1,12 @@
-﻿namespace USplitAPI.Services.Interfaces;
+﻿using USplitAPI.Helpers;
+
+namespace USplitAPI.Services.Interfaces;
 
 public interface IFamilyService
 {
-    Task<ResultTuple> AddFamilyAsync();
+    Task<ResultTuple> AddFamilyAsync(int ownerUserId, string name);
 
-    Task<ResultTuple> RemoveFamilyAsync();
+    Task<ResultTuple> RemoveFamilyAsync(int ownerUserId, int familyId);
+
+    Task<ResultTuple> GetUserDebtsAsync(int familyId, int userId);
 }

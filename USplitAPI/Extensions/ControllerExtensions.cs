@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using USplitAPI.Helpers;
 using USplitAPI.Services.Interfaces;
 
 namespace USplitAPI.Extensions;
@@ -11,4 +13,7 @@ public static class ControllerExtensions
 
         return controller.Ok(resultTuple.result);
     }
+
+    public static int UserIdFromToken(this ControllerBase controller) =>
+        int.TryParse(controller.User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) ? userId : -1;
 }

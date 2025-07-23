@@ -1,4 +1,6 @@
-﻿namespace USplitAPI.Services.Interfaces;
+﻿using USplitAPI.Helpers;
+
+namespace USplitAPI.Services.Interfaces;
 
 public interface IRefreshTokenService
 {

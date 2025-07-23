@@ -8,6 +8,7 @@ public class USplitDBContext : DbContext
     public DbSet<TransactionEntity> Transactions { get; set; }
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<FamilyEntity> Families { get; set; }
+    public DbSet<UserFamilyJoinedEntity> UserFamilies { get; set; }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     public DbSet<DebtEntity> Debts { get; set; }
 

@@ -1,4 +1,4 @@
-﻿namespace USplitAPI.Services.Interfaces;
+﻿namespace USplitAPI.Helpers;
 
 public record ResultTuple
 {
