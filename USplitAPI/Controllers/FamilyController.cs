@@ -20,8 +20,12 @@ public class FamilyController : ControllerBase
     [HttpGet]
     [Authorize]
     [Route("get-debts")]
-    public async Task<IActionResult> GetUserDebtsAsync(int userId) =>
-        this.ControllerResponse(await _service.GetUserDebtsAsync(userId));
+    public async Task<IActionResult> GetUserDebtsAsync(int familyId, int userId) =>
+        this.ControllerResponse(await _service.GetUserDebtsAsync(familyId: familyId, userId: userId));
+    
+    [HttpPost]
+    [Route("get")]
+    public async Task<IActionResult> GetFamilyAsync(int familyId) => this.ControllerResponse(await _service.GetFamilyAsync(familyId));
 
     [HttpPost]
     [Authorize]
@@ -31,5 +35,5 @@ public class FamilyController : ControllerBase
     [HttpDelete]
     [Authorize]
     [Route("remove")]
-    public async Task<IActionResult> RemoveFamilyAsync(int familyId) => this.ControllerResponse(await _service.RemoveFamilyAsync(this.UserIdFromToken(), familyId));
+    public async Task<IActionResult> RemoveFamilyAsync(int familyId) => this.ControllerResponse(await _service.RemoveFamilyAsync(ownerUserId: this.UserIdFromToken(), familyId: familyId));
 }

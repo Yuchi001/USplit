@@ -28,7 +28,15 @@ public class FamilyService : IFamilyService
             OwnerUserId = ownerUserId,
         };
         var addedFamily = await _context.Families.AddAsync(familyToAdd);
+        await _context.SaveChangesAsync();
 
+        var userFamilyToAdd = new UserFamilyJoinedEntity
+        {
+            FamilyId = addedFamily.Entity.Id,
+            UserId = ownerUserId
+        };
+
+        await _context.UserFamilies.AddAsync(userFamilyToAdd);
         await _context.SaveChangesAsync();
 
         var addedFamilyDto = _mapper.Map<FamilyDto>(addedFamily.Entity);
@@ -63,5 +71,14 @@ public class FamilyService : IFamilyService
             .ToListAsync();
         
         return ResultTuple.Success(foundDebts);
+    }
+
+    public async Task<ResultTuple> GetFamilyAsync(int familyId)
+    {
+        var foundFamily = await _context.UserFamilies.SingleOrDefaultAsync(e => e.FamilyId == familyId);
+        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound);
+
+        var foundFamilyDto = _mapper.Map<FamilyDto>(foundFamily);
+        return ResultTuple.Success(foundFamilyDto);
     }
 }
