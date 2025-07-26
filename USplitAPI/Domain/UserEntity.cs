@@ -9,5 +9,5 @@ public class UserEntity
     public DateTime DateJoined { get; set; }
 
     public List<UserFamilyJoinedEntity> UserFamilyList { get; set; } = new();
-    public List<TransactionEntity> TransactionList { get; set; } = new();
+    public List<TransactionEntity> Transactions { get; set; } = new();
 }

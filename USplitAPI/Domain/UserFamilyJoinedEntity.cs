@@ -9,4 +9,5 @@ public class UserFamilyJoinedEntity
     public FamilyEntity Family { get; set; }
     
     public List<DebtEntity> Debts { get; set; }
+    public List<TransactionEntity> Transactions { get; set; }
 }

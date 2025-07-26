@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using USplitAPI.Data;
@@ -11,9 +12,11 @@ using USplitAPI.Data;
 namespace USplitAPI.Migrations
 {
     [DbContext(typeof(USplitDBContext))]
-    partial class USplitDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250726220009_ChangedTransactionRelations")]
+    partial class ChangedTransactionRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace USplitAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("TransactionEntityUserEntity", b =>
+                {
+                    b.Property<int>("ParticipantsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TransactionEntityId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ParticipantsId", "TransactionEntityId");
+
+                    b.HasIndex("TransactionEntityId");
+
+                    b.ToTable("TransactionEntityUserEntity");
+                });
 
             modelBuilder.Entity("USplitAPI.Domain.DebtEntity", b =>
                 {
@@ -135,14 +153,9 @@ namespace USplitAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("UserEntityId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FamilyEntityId");
-
-                    b.HasIndex("UserEntityId");
 
                     b.HasIndex("OwnerUserId", "FamilyId");
 
@@ -190,6 +203,21 @@ namespace USplitAPI.Migrations
                     b.HasIndex("FamilyId");
 
                     b.ToTable("UserFamilies");
+                });
+
+            modelBuilder.Entity("TransactionEntityUserEntity", b =>
+                {
+                    b.HasOne("USplitAPI.Domain.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("USplitAPI.Domain.TransactionEntity", null)
+                        .WithMany()
+                        .HasForeignKey("TransactionEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("USplitAPI.Domain.DebtEntity", b =>
@@ -247,10 +275,6 @@ namespace USplitAPI.Migrations
                         .WithMany("TransactionList")
                         .HasForeignKey("FamilyEntityId");
 
-                    b.HasOne("USplitAPI.Domain.UserEntity", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("UserEntityId");
-
                     b.HasOne("USplitAPI.Domain.UserFamilyJoinedEntity", "UserFamily")
                         .WithMany("Transactions")
                         .HasForeignKey("OwnerUserId", "FamilyId")
@@ -293,8 +317,6 @@ namespace USplitAPI.Migrations
 
             modelBuilder.Entity("USplitAPI.Domain.UserEntity", b =>
                 {
-                    b.Navigation("Transactions");
-
                     b.Navigation("UserFamilyList");
                 });
 

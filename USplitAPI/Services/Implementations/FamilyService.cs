@@ -60,19 +60,6 @@ public class FamilyService : IFamilyService
         return ResultTuple.Success(removedFamilyDto);
     }
 
-    public async Task<ResultTuple> GetUserDebtsAsync(int familyId, int userId)
-    {
-        var foundFamily = await _context.UserFamilies.SingleOrDefaultAsync(e => e.FamilyId == familyId && e.UserId == userId);
-        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound);
-        
-        var foundDebts = await _context.Debts
-            .Where(d => d.UserFamily.UserId == userId)
-            .ProjectTo<DebtDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-        
-        return ResultTuple.Success(foundDebts);
-    }
-
     public async Task<ResultTuple> GetFamilyAsync(int familyId)
     {
         var foundFamily = await _context.UserFamilies.SingleOrDefaultAsync(e => e.FamilyId == familyId);

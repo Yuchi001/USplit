@@ -16,12 +16,6 @@ public class FamilyController : ControllerBase
     {
         _service = service;
     }
-
-    [HttpGet]
-    [Authorize]
-    [Route("get-debts")]
-    public async Task<IActionResult> GetUserDebtsAsync(int familyId, int userId) =>
-        this.ControllerResponse(await _service.GetUserDebtsAsync(familyId: familyId, userId: userId));
     
     [HttpPost]
     [Route("get")]
