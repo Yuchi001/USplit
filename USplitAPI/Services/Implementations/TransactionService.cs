@@ -15,29 +15,38 @@ public class TransactionService : ITransactionService
     private readonly IMapper _mapper;
     private readonly DebtStrategyFactory _debtStrategyFactory;
     private readonly USplitDBContext _context;
+    private readonly IFamilyService _familyService;
 
-    public TransactionService(IMapper mapper, USplitDBContext context, DebtStrategyFactory debtStrategyFactory)
+    public TransactionService(IMapper mapper, USplitDBContext context, DebtStrategyFactory debtStrategyFactory, IFamilyService familyService)
     {
+        _familyService = familyService;
         _mapper = mapper;
         _context = context;
         _debtStrategyFactory = debtStrategyFactory;
     }
     
-    public async Task<ResultTuple> GetUserDebtsAsync(int familyId, int userId)
+    public async Task<ResultTuple> GetUserDebtsAsync(int userId, int familyId)
     {
         var foundFamily = await _context.UserFamilies.SingleOrDefaultAsync(e => e.FamilyId == familyId && e.UserId == userId);
         if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "Family does not exist.");
-        
+
+        if (foundFamily.UserId != userId) return ResultTuple.Exception(StatusCodes.Status401Unauthorized);
+
         var foundDebts = await _context.Debts
-            .Where(d => d.UserFamily.UserId == userId)
+            .Where(d => d.OwnerUserId == userId && d.OwnerFamilyId == familyId)
             .ProjectTo<DebtDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
         
         return ResultTuple.Success(foundDebts);
     }
 
-    public async Task<ResultTuple> AddTransaction(TransactionOptionsDto options)
+    public async Task<ResultTuple> AddTransaction(int transactionUserId, TransactionOptionsDto options)
     {
+        if (transactionUserId != options.UserId) return ResultTuple.Exception(StatusCodes.Status404NotFound, "User cannot post transactions in name of other users");
+
+        var isMember = (await _familyService.IsMemberAsync(options.UserId, options.FamilyId)).Result<bool>();
+        if (!isMember) return ResultTuple.Exception(StatusCodes.Status401Unauthorized, "Cannot add transaction to family which user is not a part of.");
+        
         var debtCreationStrategy = _debtStrategyFactory.GetDebtCreationStrategy(options.SplitType);
         if (debtCreationStrategy == null) return ResultTuple.Exception(StatusCodes.Status400BadRequest, "Split type not valid.");
         
@@ -82,28 +91,19 @@ public class TransactionService : ITransactionService
         return ResultTuple.Success(addedTransactionDto);
     }
 
-    public async Task<ResultTuple> ResolveDebts(int lenderUserId, int ownerUserId, int amount)
+    public async Task<ResultTuple> ResolveDebt(int userId, int debtId)
     {
-        var activeDebts = await _context.Debts
-                .Where(e => !e.IsPaid && e.LenderUserId == lenderUserId && e.OwnerUserId == ownerUserId)
-                .ToListAsync();
-        if (!activeDebts.Any()) return ResultTuple.Success(amount);
+        var foundDebt = await _context.Debts.SingleOrDefaultAsync(d => d.Id == debtId);
+        if (foundDebt == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "Debt does not exist");
 
-        foreach (var debt in activeDebts)
-        {
-            amount -= debt.Amount;
-            debt.IsPaid = true;
-            if (amount > 0) continue;
-            
-            if (amount == 0) break;
+        if (foundDebt.OwnerUserId != userId) return ResultTuple.Exception(StatusCodes.Status403Forbidden, "User cannot resolve other users debts.");
 
-            debt.Amount = (int)MathF.Abs(amount);
-            debt.IsPaid = false;
-            break;
-        }
-        
+        foundDebt.Amount = 0;
+        foundDebt.IsPaid = true;
+
         await _context.SaveChangesAsync();
-        
-        return ResultTuple.Success(MathF.Min(0, amount));
+
+        var foundDebtDto = _mapper.Map<DebtDto>(foundDebt);
+        return ResultTuple.Success(foundDebtDto);
     }
-}
+} 

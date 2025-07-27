@@ -13,4 +13,6 @@ public interface IFamilyService
     Task<ResultTuple> AddMemberAsync(int ownerId, int familyId, int addUserId);
 
     Task<ResultTuple> GetMembers(int memberId, int familyId);
+
+    Task<ResultTuple> IsMemberAsync(int userId, int familyId);
 }

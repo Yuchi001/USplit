@@ -107,9 +107,14 @@ public class FamilyService : IFamilyService
             .Select(e => e.User)
             .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
-        
-        if (familyMembers.All(e => e.Id != memberId)) return ResultTuple.Exception(StatusCodes.Status401Unauthorized, $"User {memberId} is not part of a family.");
+
+        var isMember = await IsMemberAsync(memberId, familyId).ExtractResultAsync<bool>();
+        if (!isMember) return ResultTuple.Exception(StatusCodes.Status401Unauthorized, $"User {memberId} is not part of a family.");
         
         return ResultTuple.Success(familyMembers);
     }
+
+    public async Task<ResultTuple> IsMemberAsync(int userId, int familyId) => ResultTuple.Success(
+        await _context.UserFamilies.AsNoTracking().AnyAsync(e => e.UserId == userId && e.FamilyId == familyId)
+    );
 }
