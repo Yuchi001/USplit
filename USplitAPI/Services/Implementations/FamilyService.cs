@@ -47,9 +47,9 @@ public class FamilyService : IFamilyService
     public async Task<ResultTuple> RemoveFamilyAsync(int ownerUserId, int familyId)
     {
         var foundFamily = await _context.Families.SingleOrDefaultAsync(e => e.Id == familyId);
-        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound);
+        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "Family not found.");
         
-        if (foundFamily.OwnerUserId != ownerUserId) return ResultTuple.Exception(StatusCodes.Status401Unauthorized);
+        if (foundFamily.OwnerUserId != ownerUserId) return ResultTuple.Exception(StatusCodes.Status401Unauthorized, $"User {ownerUserId} does not have permissions to delete a family.");
 
         var removedFamily = _context.Families.Remove(foundFamily);
 
@@ -63,7 +63,7 @@ public class FamilyService : IFamilyService
     public async Task<ResultTuple> GetFamilyAsync(int familyId)
     {
         var foundFamily = await _context.Families.SingleOrDefaultAsync(e => e.Id == familyId);
-        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound);
+        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "Family does not exist.");
 
         var foundFamilyDto = _mapper.Map<FamilyDto>(foundFamily);
         return ResultTuple.Success(foundFamilyDto);

@@ -26,7 +26,7 @@ public class TransactionService : ITransactionService
     public async Task<ResultTuple> GetUserDebtsAsync(int familyId, int userId)
     {
         var foundFamily = await _context.UserFamilies.SingleOrDefaultAsync(e => e.FamilyId == familyId && e.UserId == userId);
-        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound);
+        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "Family does not exist.");
         
         var foundDebts = await _context.Debts
             .Where(d => d.UserFamily.UserId == userId)

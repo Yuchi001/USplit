@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("USplitAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9164cf62a16960fbe614121af309ef4a928714cc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff95bbd34f54782ee96424f41fc876f7cfcfe74f")]
 [assembly: System.Reflection.AssemblyProductAttribute("USplitAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("USplitAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

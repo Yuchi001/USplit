@@ -22,7 +22,7 @@ public class UserService : IUserService
     public async Task<ResultTuple> RemoveUserAsync(int id)
     {
         var userToDelete = await _context.Users.SingleOrDefaultAsync(e => e.Id == id);
-        if (userToDelete == null) return ResultTuple.Exception(StatusCodes.Status404NotFound);
+        if (userToDelete == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "User does not exist.");
 
         var deletedUser = _context.Users.Remove(userToDelete);
 
