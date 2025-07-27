@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using USplitAPI.Data;
@@ -11,9 +12,11 @@ using USplitAPI.Data;
 namespace USplitAPI.Migrations
 {
     [DbContext(typeof(USplitDBContext))]
-    partial class USplitDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250726231051_RemovedTransactionsFromFamilyAndUser")]
+    partial class RemovedTransactionsFromFamilyAndUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,10 +124,6 @@ namespace USplitAPI.Migrations
 
                     b.Property<int>("Amount")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Details")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("OwnerFamilyId")
                         .HasColumnType("integer");

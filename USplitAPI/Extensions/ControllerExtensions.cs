@@ -9,9 +9,11 @@ public static class ControllerExtensions
 {
     public static IActionResult ControllerResponse(this ControllerBase controller, ResultTuple resultTuple)
     {
-        if (resultTuple.result == null) return controller.StatusCode(resultTuple.statusCode);
-
-        return controller.Ok(resultTuple.result);
+        if (resultTuple.result != null) return controller.Ok(resultTuple.result);
+            
+        return controller.StatusCode(resultTuple.statusCode, new {
+            error = resultTuple.statusCode, resultTuple.message
+        });
     }
 
     public static int UserIdFromToken(this ControllerBase controller) =>
