@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using USplitAPI.Data;
 using USplitAPI.Services.Implementations;
 using USplitAPI.Services.Interfaces;
+using USplitAPI.Services.Strategies.Transaction;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,14 +49,15 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFamilyService, FamilyService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+
+builder.Services.AddTransient<DebtStrategyFactory>();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
 var key = jwtSettings["SecretKey"];
 var issuer = jwtSettings["Issuer"];
 var audience = jwtSettings["Audience"];
-
-Console.WriteLine(key);
 
 builder.Services.AddAuthentication(options =>
     {
@@ -101,7 +103,6 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-//app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();

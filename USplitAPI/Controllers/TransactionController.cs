@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using USplitAPI.Dtos;
 using USplitAPI.Extensions;
 using USplitAPI.Services.Interfaces;
 
@@ -17,8 +18,14 @@ public class TransactionController : ControllerBase
     }
     
     [HttpGet]
-    [Authorize]
+    //[Authorize]
     [Route("get-debts")]
     public async Task<IActionResult> GetUserDebtsAsync(int familyId, int userId) =>
         this.ControllerResponse(await _service.GetUserDebtsAsync(familyId: familyId, userId: userId));
+    
+    [HttpPost]
+    //[Authorize]
+    [Route("add")]
+    public async Task<IActionResult> AddTransaction(TransactionOptionsDto options) =>
+        this.ControllerResponse(await _service.AddTransaction(options));
 }

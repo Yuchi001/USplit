@@ -7,5 +7,5 @@ public interface ITransactionService
 {
     Task<ResultTuple> GetUserDebtsAsync(int familyId, int userId);
 
-    Task<ResultTuple> AddTransaction(TransactionDto transaction);
+    Task<ResultTuple> AddTransaction(TransactionOptionsDto options);
 }

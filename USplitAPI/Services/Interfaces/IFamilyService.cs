@@ -9,4 +9,8 @@ public interface IFamilyService
     Task<ResultTuple> RemoveFamilyAsync(int ownerUserId, int familyId);
 
     Task<ResultTuple> GetFamilyAsync(int familyId);
+
+    Task<ResultTuple> AddMemberAsync(int ownerId, int familyId, int addUserId);
+
+    Task<ResultTuple> GetMembers(int memberId, int familyId);
 }
