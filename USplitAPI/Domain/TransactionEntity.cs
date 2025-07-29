@@ -5,7 +5,8 @@ public class TransactionEntity
     public int Id { get; set; }
     public int Amount { get; set; }
     public int FamilyId { get; set; }
-    public int OwnerUserId { get; set; }
+    public int UserId { get; set; }
+    public string Details { get; set; } = "";
     public string SplitType { get; set; } = "";
     
     public UserFamilyJoinedEntity UserFamily { get; set; }

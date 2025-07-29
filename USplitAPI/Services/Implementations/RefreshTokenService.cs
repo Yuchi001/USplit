@@ -56,7 +56,7 @@ public class RefreshTokenService : IRefreshTokenService
     public async Task<ResultTuple> RevalidateRefreshTokenByUserAsync(int userId)
     {
         var token = await _context.RefreshTokens.SingleOrDefaultAsync(e => e.UserId == userId);
-        if (token == null) return ResultTuple.Exception(StatusCodes.Status404NotFound);
+        if (token == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "Refresh token does not exist.");
         
         token.ExpiryDate = DateTime.UtcNow.AddDays(EXPIRY_DAYS);
 
@@ -70,7 +70,7 @@ public class RefreshTokenService : IRefreshTokenService
     {
         var foundToken = await _context.RefreshTokens.AsNoTracking().SingleOrDefaultAsync(e => e.Token == token);
         if (foundToken == null || foundToken.ExpiryDate < DateTime.UtcNow)
-            return ResultTuple.Exception(StatusCodes.Status403Forbidden);
+            return ResultTuple.Exception(StatusCodes.Status403Forbidden, "Can not refresh the session.");
 
         var revalidateTuple = await RevalidateRefreshTokenByUserAsync(foundToken.UserId);
         var newToken = JWTHelper.GenerateJwtToken(foundToken.UserId, _configuration);

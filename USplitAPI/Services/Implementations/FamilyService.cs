@@ -47,9 +47,9 @@ public class FamilyService : IFamilyService
     public async Task<ResultTuple> RemoveFamilyAsync(int ownerUserId, int familyId)
     {
         var foundFamily = await _context.Families.SingleOrDefaultAsync(e => e.Id == familyId);
-        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound);
+        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "Family not found.");
         
-        if (foundFamily.OwnerUserId != ownerUserId) return ResultTuple.Exception(StatusCodes.Status401Unauthorized);
+        if (foundFamily.OwnerUserId != ownerUserId) return ResultTuple.Exception(StatusCodes.Status401Unauthorized, $"User {ownerUserId} does not have permissions to delete a family.");
 
         var removedFamily = _context.Families.Remove(foundFamily);
 
@@ -62,10 +62,59 @@ public class FamilyService : IFamilyService
 
     public async Task<ResultTuple> GetFamilyAsync(int familyId)
     {
-        var foundFamily = await _context.UserFamilies.SingleOrDefaultAsync(e => e.FamilyId == familyId);
-        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound);
+        var foundFamily = await _context.Families.SingleOrDefaultAsync(e => e.Id == familyId);
+        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "Family does not exist.");
 
         var foundFamilyDto = _mapper.Map<FamilyDto>(foundFamily);
         return ResultTuple.Success(foundFamilyDto);
     }
+
+    public async Task<ResultTuple> AddMemberAsync(int ownerId, int familyId, int addUserId)
+    {
+        var foundFamily = await _context.Families.AsNoTracking().SingleOrDefaultAsync(e => e.Id == familyId);
+        if (foundFamily == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "Family does not exist.");
+
+        var foundUser = await _context.Users.AsNoTracking().SingleOrDefaultAsync(e => e.Id == addUserId);
+        if (foundUser == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "User does not exist.");
+
+        var alreadyAdded = await _context.UserFamilies
+            .AsNoTracking()
+            .AnyAsync(e => e.FamilyId == familyId && e.UserId == addUserId);
+        if (alreadyAdded) return ResultTuple.Exception(StatusCodes.Status403Forbidden, "User is already a member of a family.");
+        
+        if (foundFamily.OwnerUserId != ownerId) return ResultTuple.Exception(StatusCodes.Status401Unauthorized);
+
+        var userFamilyEntity = new UserFamilyJoinedEntity
+        {
+            FamilyId = familyId,
+            UserId = addUserId,
+        };
+        await _context.UserFamilies.AddAsync(userFamilyEntity);
+
+        await _context.SaveChangesAsync();
+        
+        var userDto = _mapper.Map<UserDto>(foundUser);
+        return ResultTuple.Success(userDto);
+    }
+
+    public async Task<ResultTuple> GetMembers(int memberId, int familyId)
+    {
+        var familyExists = await _context.Families.AnyAsync(e => e.Id == familyId);
+        if (!familyExists) return ResultTuple.Exception(StatusCodes.Status404NotFound, "Family does not exist");
+
+        var familyMembers = await _context.UserFamilies
+            .Where(e => e.FamilyId == familyId)
+            .Select(e => e.User)
+            .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        var isMember = await IsMemberAsync(memberId, familyId).ExtractResultAsync<bool>();
+        if (!isMember) return ResultTuple.Exception(StatusCodes.Status401Unauthorized, $"User {memberId} is not part of a family.");
+        
+        return ResultTuple.Success(familyMembers);
+    }
+
+    public async Task<ResultTuple> IsMemberAsync(int userId, int familyId) => ResultTuple.Success(
+        await _context.UserFamilies.AsNoTracking().AnyAsync(e => e.UserId == userId && e.FamilyId == familyId)
+    );
 }

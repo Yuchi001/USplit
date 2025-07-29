@@ -31,7 +31,8 @@ public class UserFamilyJoinedConfiguration : IEntityTypeConfiguration<UserFamily
         builder
             .HasMany(uf => uf.Transactions)
             .WithOne(d => d.UserFamily)
-            .HasForeignKey(d => new { UserId = d.OwnerUserId, d.FamilyId })
+            .HasForeignKey(d => new { UserId = d.UserId, FamilyId = d.FamilyId })
+            .HasPrincipalKey(uf => new { uf.UserId, uf.FamilyId })
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

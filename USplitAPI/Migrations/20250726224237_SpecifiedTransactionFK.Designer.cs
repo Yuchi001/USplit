@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using USplitAPI.Data;
@@ -11,9 +12,11 @@ using USplitAPI.Data;
 namespace USplitAPI.Migrations
 {
     [DbContext(typeof(USplitDBContext))]
-    partial class USplitDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250726224237_SpecifiedTransactionFK")]
+    partial class SpecifiedTransactionFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,8 +36,12 @@ namespace USplitAPI.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsPaid")
-                        .HasColumnType("boolean");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("LenderUserId")
                         .HasColumnType("integer");
@@ -43,9 +50,6 @@ namespace USplitAPI.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("OwnerUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TotalAmount")
                         .HasColumnType("integer");
 
                     b.Property<int>("TransactionId")
@@ -121,23 +125,29 @@ namespace USplitAPI.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Details")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("FamilyEntityId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("FamilyId")
+                    b.Property<int>("OwnerFamilyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OwnerUserId")
                         .HasColumnType("integer");
 
                     b.Property<string>("SplitType")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserEntityId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "FamilyId");
+                    b.HasIndex("FamilyEntityId");
+
+                    b.HasIndex("UserEntityId");
+
+                    b.HasIndex("OwnerUserId", "OwnerFamilyId");
 
                     b.ToTable("Transactions");
                 });
@@ -236,9 +246,17 @@ namespace USplitAPI.Migrations
 
             modelBuilder.Entity("USplitAPI.Domain.TransactionEntity", b =>
                 {
+                    b.HasOne("USplitAPI.Domain.FamilyEntity", null)
+                        .WithMany("TransactionList")
+                        .HasForeignKey("FamilyEntityId");
+
+                    b.HasOne("USplitAPI.Domain.UserEntity", null)
+                        .WithMany("Transactions")
+                        .HasForeignKey("UserEntityId");
+
                     b.HasOne("USplitAPI.Domain.UserFamilyJoinedEntity", "UserFamily")
                         .WithMany("Transactions")
-                        .HasForeignKey("UserId", "FamilyId")
+                        .HasForeignKey("OwnerUserId", "OwnerFamilyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -266,6 +284,8 @@ namespace USplitAPI.Migrations
 
             modelBuilder.Entity("USplitAPI.Domain.FamilyEntity", b =>
                 {
+                    b.Navigation("TransactionList");
+
                     b.Navigation("UserFamilyList");
                 });
 
@@ -276,6 +296,8 @@ namespace USplitAPI.Migrations
 
             modelBuilder.Entity("USplitAPI.Domain.UserEntity", b =>
                 {
+                    b.Navigation("Transactions");
+
                     b.Navigation("UserFamilyList");
                 });
 

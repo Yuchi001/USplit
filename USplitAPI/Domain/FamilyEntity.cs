@@ -10,5 +10,4 @@ public class FamilyEntity
     
     public UserEntity User { get; set; }
     public List<UserFamilyJoinedEntity> UserFamilyList { get; set; } = new();
-    public List<TransactionEntity> TransactionList { get; set; } = new();
 }

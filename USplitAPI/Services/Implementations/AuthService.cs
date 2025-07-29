@@ -28,7 +28,7 @@ public class AuthService : IAuthService
     public async Task<ResultTuple> RegisterUserAsync(string email, string displayName, string password)
     {
         var isTaken = await IsEmailTakenAsync(email);
-        if (isTaken.Result<bool>()) return ResultTuple.Exception(StatusCodes.Status403Forbidden);
+        if (isTaken.Result<bool>()) return ResultTuple.Exception(StatusCodes.Status403Forbidden, "Email is already taken.");
 
         var userToAdd = new UserDto
         {
@@ -44,10 +44,10 @@ public class AuthService : IAuthService
     public async Task<ResultTuple> LoginUserAsync(string email, string password, bool rememberMe)
     {
         var user = await _context.Users.AsNoTracking().SingleOrDefaultAsync(e => e.Email.ToLower() == email.ToLower());
-        if (user == null) return ResultTuple.Exception(StatusCodes.Status404NotFound);
+        if (user == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "User does not exist.");
 
         if (!PasswordHelper.Verify(password, user.Password))
-            return ResultTuple.Exception(StatusCodes.Status401Unauthorized);
+            return ResultTuple.Exception(StatusCodes.Status400BadRequest, "Password is not valid.");
 
         var tokenJWT = JWTHelper.GenerateJwtToken(user.Id, _configuration);
         if (!rememberMe) return ResultTuple.Success(new { token = tokenJWT });
