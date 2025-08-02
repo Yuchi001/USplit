@@ -21,9 +21,7 @@ public class UserService : IUserService
 
     public async Task<ResultTuple> RemoveUserAsync(int id)
     {
-        var userToDelete = await _context.Users.SingleOrDefaultAsync(e => e.Id == id);
-        if (userToDelete == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "User does not exist.");
-
+        var userToDelete = await _context.Users.SingleAsync(e => e.Id == id);
         var deletedUser = _context.Users.Remove(userToDelete);
 
         await _context.SaveChangesAsync();
@@ -39,9 +37,20 @@ public class UserService : IUserService
         var addedUser = await _context.Users.AddAsync(userEntity);
 
         await _context.SaveChangesAsync();
+        
+        userEntity.UserCode = UserCodeHelper.GenerateCode(userEntity.Id);
+
+        _context.Users.Update(userEntity);
+        await _context.SaveChangesAsync();
 
         var addedUserDto = _mapper.Map<UserDto>(addedUser.Entity);
         
         return ResultTuple.Success(addedUserDto);
+    }
+
+    public async Task<ResultTuple> GetUserAsync(int id)
+    {
+        var userEntity = await _context.Users.SingleAsync(e => e.Id == id);
+        return ResultTuple.Success(_mapper.Map<UserDto>(userEntity));
     }
 }

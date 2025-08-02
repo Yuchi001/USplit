@@ -22,8 +22,15 @@ public class UserController : ControllerBase
     public async Task<IActionResult> AddUserAsync(UserDto userDto) =>
         this.ControllerResponse(await _service.AddUserAsync(userDto));
     
+    [HttpGet]
+    [Authorize]
+    [Route("get")]
+    public async Task<IActionResult> GetDataAsync() =>
+        this.ControllerResponse(await _service.GetUserAsync(this.UserIdFromToken()));
+    
     [HttpDelete]
+    [Authorize]
     [Route("remove")]
-    public async Task<IActionResult> RemoveUserAsync(int id) =>
-        this.ControllerResponse(await _service.RemoveUserAsync(id));
+    public async Task<IActionResult> RemoveUserAsync() =>
+        this.ControllerResponse(await _service.RemoveUserAsync(this.UserIdFromToken()));
 }

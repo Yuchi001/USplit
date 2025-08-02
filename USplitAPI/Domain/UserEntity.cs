@@ -6,6 +6,7 @@ public class UserEntity
     public string Email { get; set; } = "";
     public string DisplayName { get; set; } = "";
     public string Password { get; set; } = "";
+    public string UserCode { get; set; } = "";
     public DateTime DateJoined { get; set; }
 
     public List<UserFamilyJoinedEntity> UserFamilyList { get; set; } = new();

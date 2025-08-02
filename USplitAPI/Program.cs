@@ -81,6 +81,26 @@ builder.Services.AddAuthentication(options =>
 
             ClockSkew = TimeSpan.Zero
         };
+        
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine(context.Exception.GetType());
+                if (context.Exception.GetType() != typeof(SecurityTokenExpiredException)) return Task.CompletedTask;
+                
+                context.Response.StatusCode = 401;
+                context.Response.ContentType = "application/json";
+
+                var result = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    error = "token_expired",
+                    message = "Access token has expired"
+                });
+
+                return context.Response.WriteAsync(result);
+            },
+        };
     });
 
 builder.Services.AddAuthorization();

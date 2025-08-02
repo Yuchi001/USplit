@@ -7,4 +7,5 @@ public interface IUserService
 {
     Task<ResultTuple> RemoveUserAsync(int id);
     Task<ResultTuple> AddUserAsync(UserDto userDto);
+    Task<ResultTuple> GetUserAsync(int id);
 }
