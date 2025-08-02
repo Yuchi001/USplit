@@ -1,5 +1,6 @@
 // src/api/tokenService.ts
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {TokenPair} from "@/api/models/TokenPair";
 
 const ACCESS_TOKEN_KEY = 'access_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
@@ -18,7 +19,6 @@ export const tokenHandler = {
         await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
     },
 
-    // Refresh token
     async saveRefreshToken(token: string) {
         await AsyncStorage.setItem(REFRESH_TOKEN_KEY, token);
     },
@@ -31,7 +31,13 @@ export const tokenHandler = {
         await AsyncStorage.removeItem(REFRESH_TOKEN_KEY);
     },
 
-    // Szybka metoda na czyszczenie obu
+    async saveTokens(pair: TokenPair) {
+        await Promise.all([
+            this.saveRefreshToken(pair.refresh),
+            this.saveAccessToken(pair.token),
+        ]);
+    },
+
     async clearTokens() {
         await Promise.all([
             AsyncStorage.removeItem(ACCESS_TOKEN_KEY),

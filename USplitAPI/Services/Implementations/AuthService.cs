@@ -35,13 +35,14 @@ public class AuthService : IAuthService
             Email = email,
             DisplayName = displayName,
             Password = password,
+            DateJoined = DateTime.UtcNow,
         };
         var createdUser = await _userService.AddUserAsync(userToAdd);
 
-        return ResultTuple.Success(createdUser);
+        return createdUser;
     }
 
-    public async Task<ResultTuple> LoginUserAsync(string email, string password, bool rememberMe)
+    public async Task<ResultTuple> LoginUserAsync(string email, string password)
     {
         var user = await _context.Users.AsNoTracking().SingleOrDefaultAsync(e => e.Email.ToLower() == email.ToLower());
         if (user == null) return ResultTuple.Exception(StatusCodes.Status404NotFound, "User does not exist.");
@@ -50,7 +51,6 @@ public class AuthService : IAuthService
             return ResultTuple.Exception(StatusCodes.Status400BadRequest, "Password is not valid.");
 
         var tokenJWT = JWTHelper.GenerateJwtToken(user.Id, _configuration);
-        if (!rememberMe) return ResultTuple.Success(new { token = tokenJWT });
         
         var refreshToken = await _refreshTokenService.GenerateAsync(user.Id);
         
@@ -61,5 +61,11 @@ public class AuthService : IAuthService
     {
         var taken = await _context.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower());
         return ResultTuple.Success(taken);
+    }
+
+    public async Task<ResultTuple> RefreshSessionAsync(string refreshToken)
+    {
+        var token = await _refreshTokenService.RefreshSessionAsync(refreshToken);
+        return token;
     }
 }

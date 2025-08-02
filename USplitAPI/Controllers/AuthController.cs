@@ -17,8 +17,8 @@ public class AuthController : ControllerBase
 
     [HttpPost]
     [Route("login")]
-    public async Task<IActionResult> LoginAsync(string email, string password, bool rememberMe) =>
-        this.ControllerResponse(await _service.LoginUserAsync(email: email, password: password, rememberMe: rememberMe));
+    public async Task<IActionResult> LoginAsync(string email, string password) =>
+        this.ControllerResponse(await _service.LoginUserAsync(email: email, password: password));
     
     [HttpPost]
     [Route("register")]
@@ -29,4 +29,9 @@ public class AuthController : ControllerBase
     [Route("check-email")]
     public async Task<IActionResult> IsEmailTaken(string email) =>
         this.ControllerResponse(await _service.IsEmailTakenAsync(email));
+
+    [HttpPost]
+    [Route("refresh-token")]
+    public async Task<IActionResult> RefreshSessionAsync(string refreshToken) =>
+        this.ControllerResponse(await _service.RefreshSessionAsync(refreshToken));
 }

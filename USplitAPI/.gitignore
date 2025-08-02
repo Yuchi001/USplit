@@ -73,3 +73,5 @@ coverage/
 
 # appsettings
 appsettings.json
+
+.env

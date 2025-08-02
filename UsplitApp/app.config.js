@@ -2,8 +2,8 @@ import 'dotenv/config';
 
 export default {
     expo: {
-        name: 'App',
-        slug: 'app',
+        name: 'USplitApp',
+        slug: 'usplitapp',
         extra: {
             apiBaseUrl: process.env.API_BASE_URL
         }
