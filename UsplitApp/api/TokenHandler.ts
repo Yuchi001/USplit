@@ -33,7 +33,7 @@ export const tokenHandler = {
 
     async saveTokens(pair: TokenPair) {
         await Promise.all([
-            this.saveRefreshToken(pair.refresh),
+            this.saveRefreshToken(pair.refresh_token),
             this.saveAccessToken(pair.token),
         ]);
     },

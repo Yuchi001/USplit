@@ -11,6 +11,8 @@ export const useAuth = () => {
         const tokenPair = await api.login(email, password);
         if (!tokenPair) return false;
 
+        console.log(tokenPair);
+
         await tokenHandler.saveTokens(tokenPair);
 
         const loggedUser = await api.getUserData();

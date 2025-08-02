@@ -1,4 +1,4 @@
 export type TokenPair = {
     token: string;
-    refresh: string;
+    refresh_token: string;
 }
