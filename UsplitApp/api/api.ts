@@ -12,6 +12,8 @@ export class Api implements USplitAPI {
         this.client = new HttpClient(Constants.expoConfig?.extra?.apiBaseUrl)
     }
 
+    public initInterceptor = async (refreshTokenFunc: () => Promise<boolean>) => this.client.initInterceptor(refreshTokenFunc);
+
     // AUTH
     async checkEmail(email: string): Promise<boolean> {
         const res = await this.client.get(ApiRoutes.checkEmail(email));
